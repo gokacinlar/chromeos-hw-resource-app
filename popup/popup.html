@@ -29,19 +29,24 @@
                 </div>
             </section>
         </div>
-        <section id="hardwareInfoDiv" class="d-flex flex-column justify-content-center px-2 py-2">
-            <div class="py-2 gap-2 d-flex flex-row align-items-center justify-content-start">
-                <div class="border border-primary rounded-2 px-2 py-2">
-                    <h2 class="display-4 mt-0 mb-0 ml-0">
-                        CPU:
+        <section id="hardwareInfoDiv" class="col-12 d-flex flex-column justify-content-center px-2 py-2">
+            <div class="py-2 gap-2 d-flex flex-column align-items-center justify-content-start">
+                <div class="w-100 bg-primary text-white text-center rounded-2 px-2 py-2">
+                    <h2 class="display-6 fw-normal mt-0 mb-0 ml-0">
+                        CPU
                     </h2>
                 </div>
-                <div id="cpuContent"></div>
+                <div id="cpuContent" class="w-100 d-flex flex-row align-items-center gap-3">
+                    <div id="cpuArchitecture"
+                        class="d-flex flex-column align-items-center justify-content-center gap-1">
+
+                    </div>
+                </div>
             </div>
-            <div class="py-2 gap-2 d-flex flex-row align-items-center justify-content-start">
-                <div class="border border-primary rounded-2 px-2 py-2">
-                    <h2 class="display-4 mt-0 mb-0">
-                        Memory:
+            <div class="py-2 gap-2 d-flex flex-column align-items-center justify-content-start">
+                <div class="w-100 bg-warning text-black text-center rounded-2 px-2 py-2">
+                    <h2 class="display-6 fw-normal mt-0 mb-0">
+                        Memory
                     </h2>
                 </div>
                 <div id="memContent">
@@ -49,15 +54,13 @@
                     <div id="availableMemContent"></div>
                 </div>
             </div>
-            <div class="py-2 gap-2 d-flex flex-row align-items-start justify-content-start">
-                <div class="border border-primary rounded-2 px-2 py-2">
-                    <h2 class="display-4 mt-0 mb-0">
-                        Storage:
+            <div class="py-2 gap-2 d-flex flex-column align-items-start justify-content-start">
+                <div class="w-100 bg-success text-white text-center rounded-2 px-2 py-2">
+                    <h2 class="display-6 fw-normal mt-0 mb-0">
+                        Storage
                     </h2>
                 </div>
-                <div id="storageContent">
-
-                </div>
+                <div id="storageContent"></div>
             </div>
         </section>
     </main>
