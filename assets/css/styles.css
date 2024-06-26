@@ -1,0 +1,15 @@
+#contentHolder {
+    width: 512px;
+    height: fit-content;
+}
+
+/* Usage Indicators Initial Stage */
+
+.progress {
+    height: 24px !important;
+}
+
+
+.hardware-name {
+    width: 10%;
+}

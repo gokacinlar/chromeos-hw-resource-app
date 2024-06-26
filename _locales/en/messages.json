@@ -1,0 +1,10 @@
+{
+    "extensionName": {
+        "message": "ChromeOS Hardware Info",
+        "description": "Name of the extension."
+    },
+    "extensionDescription": {
+        "message": "Simple & Powerful Hardware Information Utility for ChromeOS.",
+        "description": "Description of the extension."
+    }
+}

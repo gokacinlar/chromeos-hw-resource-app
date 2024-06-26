@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+    <title>ChromeOS Hardware Info</title>
+    <!--favicon-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon_32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon_16x16.png">
+    <!--end of favicon-->
+    <link rel="stylesheet" type="text/css" href="/src/lib/fastbootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/styles.css">
+</head>
+
+<body id="contentHolder">
+    <main id="banner" class="col-12 w-100 d-flex flex-column gap-5 bg-black text-light px-3 py-3 position-relative">
+        <div id="bannerContent">
+            <section class="d-flex flex-row gap-5 align-items-center justify-content-center">
+                <div>
+                    <img class="img-fluid" src="/icons/icon_128x128.png" alt="ChromeOS Resource Monitor"
+                        title="ChromeOS Resource Monitor">
+                </div>
+                <div>
+                    <h1 class="display-4 text-center">
+                        ChromeOS Hardware Info
+                    </h1>
+                </div>
+            </section>
+        </div>
+        <section id="hardwareInfoDiv" class="d-flex flex-column justify-content-center px-2 py-2">
+            <div class="py-2 gap-2 d-flex flex-row align-items-center justify-content-start">
+                <div class="border border-primary rounded-2 px-2 py-2">
+                    <h2 class="display-4 mt-0 mb-0 ml-0">
+                        CPU:
+                    </h2>
+                </div>
+                <div id="cpuContent"></div>
+            </div>
+            <div class="py-2 gap-2 d-flex flex-row align-items-center justify-content-start">
+                <div class="border border-primary rounded-2 px-2 py-2">
+                    <h2 class="display-4 mt-0 mb-0">
+                        Memory:
+                    </h2>
+                </div>
+                <div id="memContent">
+                    <div id="totalMemContent"></div>
+                    <div id="availableMemContent"></div>
+                </div>
+            </div>
+            <div class="py-2 gap-2 d-flex flex-row align-items-start justify-content-start">
+                <div class="border border-primary rounded-2 px-2 py-2">
+                    <h2 class="display-4 mt-0 mb-0">
+                        Storage:
+                    </h2>
+                </div>
+                <div id="storageContent">
+
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="/src/app.js"></script>
+    <script src="/src/background/service_worker.js"></script>
+</body>
+
+</html>
