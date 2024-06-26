@@ -4,7 +4,3 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions-.json
-
-# Folders
-
-**src/lib/
