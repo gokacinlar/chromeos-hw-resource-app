@@ -16,30 +16,37 @@ function initSystemInfo() {
 }
 
 function getCpuUsage() {
-    chrome.system.cpu.getInfo(function (cpuInfo) {
-        if (!cpuInfo) {
-            console.error("Failed to get CPU information.");
-            return;
-        }
-        // Define the placeholder divs in an object for later usage
-        const cpuDivsObj = {
-            cpuStatsDiv: document.getElementById("cpuContent"),
-            cpuNameInfoDiv: document.getElementById("cpuNameInfo"),
-            cpuCoreInfoDiv: document.getElementById("cpuCoreInfo"),
-            cpuArchitectureDiv: document.getElementById("cpuArchitecture"),
-            cpuRuntimeInfo: document.getElementById("cpuRuntimeInfo")
-        };
+    // Define the placeholder divs in an object for later usage
+    const cpuDivsObj = {
+        cpuStatsDiv: document.getElementById("cpuContent"),
+        cpuNameInfoDiv: document.getElementById("cpuNameInfo"),
+        cpuCoreInfoDiv: document.getElementById("cpuCoreInfo"),
+        cpuArchitectureDiv: document.getElementById("cpuArchitecture"),
+        cpuRuntimeInfo: document.getElementById("cpuRuntimeInfo")
+    };
 
-        if (cpuDivsObj.cpuStatsDiv) {
-            cpuDivsObj.cpuStatsDiv.classList.add("fs-5");
+    if (cpuDivsObj.cpuStatsDiv) {
+        const cpuRuntimeSpinner = createSpinner(document.createElement("div"), cpuDivsObj.cpuRuntimeInfo);
+        cpuDivsObj.cpuStatsDiv.classList.add("fs-5");
+        chrome.system.cpu.getInfo(function (cpuInfo) {
+            if (!cpuInfo) {
+                console.error("Failed to get CPU information.");
+                return;
+            }
+            // Create and show spinners
+            createSpinner(document.createElement("div"), cpuDivsObj.cpuRuntimeInfo);
+
             displayCpuInfo(cpuInfo, cpuDivsObj);
+
+            // Hide spinners once CPU info is loaded
+            cpuRuntimeSpinner.remove();
 
             // Update processor usage every half a second (500ms)
             setInterval(() => {
                 updateProcessorUsage(cpuInfo, cpuDivsObj.cpuRuntimeInfo);
             }, 500);
-        }
-    });
+        });
+    }
 }
 
 function displayCpuInfo(cpuInfo, cpuDivsObj) {
@@ -102,46 +109,68 @@ function calculateCpuUsage(processors) {
     };
 }
 
+function createSpinner(spinner, divName) {
+    spinner = document.createElement("div");
+    spinner.setAttribute("class", "spinner-border text-white");
+    divName.appendChild(spinner);
+    return spinner;
+}
+
 function getMemUsage() {
-    chrome.system.memory.getInfo(function (memInfo) {
-        const availableCapacityBytes = memInfo.availableCapacity;
-        const capacityBytes = memInfo.capacity;
+    const availableMemDiv = document.getElementById("availableMemContent");
+    const totalMemDiv = document.getElementById("totalMemContent");
 
-        let availableCapacityGB = convertBytesToGb(availableCapacityBytes);
-        let totalCapacityGB = convertBytesToGb(capacityBytes);
+    if (availableMemDiv && totalMemDiv) {
+        // Create and show spinners
+        const availableMemSpinner = createSpinner(document.createElement("div"), availableMemDiv);
+        const totalMemSpinner = createSpinner(document.createElement("div"), totalMemDiv);
 
-        const availableMemDiv = document.getElementById("availableMemContent");
-        const totalMemDiv = document.getElementById("totalMemContent");
+        setInterval(() => {
+            // Show spinners while loading memory info
+            availableMemSpinner.style.display = "block";
+            totalMemSpinner.style.display = "block";
 
-        if (availableMemDiv && totalMemDiv) {
-            availableMemDiv.textContent = `Available Capacity: ${availableCapacityGB} GB`;
-            totalMemDiv.textContent = `Total Capacity: ${totalCapacityGB} GB`;
+            chrome.system.memory.getInfo(function (memInfo) {
+                const availableCapacityBytes = memInfo.availableCapacity;
+                const capacityBytes = memInfo.capacity;
 
-            availableMemDiv.classList.add("fs-5");
-            totalMemDiv.classList.add("fs-5");
-        } else {
-            console.error("Memory content elements not found.");
-        }
-    });
+                let availableCapacityGB = convertBytesToGb(availableCapacityBytes);
+                let totalCapacityGB = convertBytesToGb(capacityBytes);
+
+                // Hide spinners once memory info is loaded
+                availableMemSpinner.style.display = "none";
+                totalMemSpinner.style.display = "none";
+
+                availableMemDiv.textContent = `Available Capacity: ${availableCapacityGB} GB`;
+                totalMemDiv.textContent = `Total Capacity: ${totalCapacityGB} GB`;
+
+                availableMemDiv.classList.add("fs-5");
+                totalMemDiv.classList.add("fs-5");
+            });
+        }, 250);
+    } else {
+        console.error("Memory content elements not found.");
+    }
 }
 
 function getStorageUsage() {
     chrome.system.storage.getInfo(function (storageInfo) {
-        console.log(storageInfo);
         const storageDiv = document.getElementById("storageContent");
         for (let i in storageInfo) {
             let storageObj = storageInfo[i];
 
-            let storageName = storageObj.name;
-            let storageId = storageObj.id;
-            let storageCapacity = storageObj.capacity;
+            const storagePlaceHolderObj = {
+                storageName: storageObj.name,
+                storageId: storageObj.id,
+                storageCapacity: storageObj.capacity
+            }
 
-            console.log(storageName, storageId, storageCapacity);
+            console.log(storagePlaceHolderObj.storageName, storagePlaceHolderObj.storageId, storagePlaceHolderObj.storageCapacity);
 
             const ul = document.createElement("ul");
             const li = document.createElement("li")
 
-            li.textContent = `${convertBytesToGb(storageCapacity)} GB`;
+            li.textContent = `${convertBytesToGb(storagePlaceHolderObj.storageCapacity)} GB`;
 
             storageDiv.appendChild(ul);
             ul.appendChild(li);
