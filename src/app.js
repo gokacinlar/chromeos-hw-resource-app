@@ -1,5 +1,10 @@
 // Function to read CPU information
 
+// add function to display current cpu usage
+// add function to display storage usage in a progress bar
+// add function to display available mem usage in a progress bar 
+
+
 document.addEventListener("DOMContentLoaded", function () {
     initSystemInfo();
 });
@@ -15,34 +20,86 @@ function getCpuUsage() {
         if (!cpuInfo) {
             console.error("Failed to get CPU information.");
             return;
-        } else {
-            const cpuStatsDiv = document.getElementById("cpuContent");
-            const cpuArchitectureDiv = document.getElementById("cpuArchitecture");
+        }
+        // Define the placeholder divs in an object for later usage
+        const cpuDivsObj = {
+            cpuStatsDiv: document.getElementById("cpuContent"),
+            cpuNameInfoDiv: document.getElementById("cpuNameInfo"),
+            cpuCoreInfoDiv: document.getElementById("cpuCoreInfo"),
+            cpuArchitectureDiv: document.getElementById("cpuArchitecture"),
+            cpuRuntimeInfo: document.getElementById("cpuRuntimeInfo")
+        };
 
-            if (cpuStatsDiv) {
-                const cpuInfoHolder = document.createElement("p");
-                const cpuArchitectureInfoHolder = document.createElement("p");
+        if (cpuDivsObj.cpuStatsDiv) {
+            cpuDivsObj.cpuStatsDiv.classList.add("fs-5");
+            displayCpuInfo(cpuInfo, cpuDivsObj);
 
-                cpuInfoHolder.setAttribute("class", "my-0")
-                cpuArchitectureInfoHolder.setAttribute("class", "my-0")
-
-                cpuInfoHolder.textContent = `${cpuInfo.modelName}`;
-                cpuArchitectureInfoHolder.textContent = `${cpuInfo.archName}`;
-
-                if (cpuInfo.archName === "x86_64" || cpuInfo.archName === "x86") {
-                    insertArchitectureIntel(cpuArchitectureDiv);
-                } else if (!cpuInfo.modelName.includes("Intel(R)" && cpuInfo.includes("AMD"))) {
-                    insertArchitectureAmd(cpuArchitectureDiv);
-                } else if (cpuInfo.archName === "arm64" || cpuInfo.archName === "arm") {
-                    insertArchitectureArm(cpuArchitectureDiv)
-                }
-
-                cpuStatsDiv.appendChild(cpuInfoHolder);
-                cpuStatsDiv.classList.add("fs-5");
-                cpuArchitectureDiv.appendChild(cpuArchitectureInfoHolder);
-            }
+            // Update processor usage every half a second (500ms)
+            setInterval(() => {
+                updateProcessorUsage(cpuInfo, cpuDivsObj.cpuRuntimeInfo);
+            }, 500);
         }
     });
+}
+
+function displayCpuInfo(cpuInfo, cpuDivsObj) {
+    const cpuInfoHolder = createParagraph(cpuInfo.modelName, "my-0");
+    const cpuArchitectureInfoHolder = createParagraph(cpuInfo.archName, "my-0");
+
+    cpuDivsObj.cpuNameInfoDiv.appendChild(cpuInfoHolder);
+    cpuDivsObj.cpuArchitectureDiv.appendChild(cpuArchitectureInfoHolder);
+    setArchitecture(cpuInfo, cpuDivsObj.cpuArchitectureDiv);
+
+    const totalCoresHolder = createParagraph(`Total CPU Cores: ${cpuInfo.processors.length}`, "my-0");
+    cpuDivsObj.cpuCoreInfoDiv.appendChild(totalCoresHolder);
+}
+
+function createParagraph(text, className) {
+    const p = document.createElement("p");
+    p.setAttribute("class", className);
+    p.textContent = text;
+    return p;
+}
+
+function setArchitecture(cpuInfo, cpuArchitectureDiv) {
+    if (cpuInfo.archName === "x86_64" || cpuInfo.archName === "x86") {
+        insertArchitectureIntel(cpuArchitectureDiv);
+    } else if (!cpuInfo.modelName.includes("Intel(R)") && cpuInfo.modelName.includes("AMD")) {
+        insertArchitectureAmd(cpuArchitectureDiv);
+    } else if (cpuInfo.archName === "arm64" || cpuInfo.archName === "arm") {
+        insertArchitectureArm(cpuArchitectureDiv);
+    }
+}
+
+function updateProcessorUsage(cpuInfo, cpuRuntimeInfoDiv) {
+    chrome.system.cpu.getInfo(function (updatedCpuInfo) {
+        const cpuDetailObj = calculateCpuUsage(updatedCpuInfo.processors);
+        // Remove the previous usage display
+        while (cpuRuntimeInfoDiv.firstChild) {
+            cpuRuntimeInfoDiv.removeChild(cpuRuntimeInfoDiv.firstChild);
+        }
+        const overallCpuUsageHolder = createParagraph(`CPU Usage: ${cpuDetailObj.usagePercentage.toFixed(2)}%`, "my-0");
+        cpuRuntimeInfoDiv.appendChild(overallCpuUsageHolder);
+    });
+}
+
+function calculateCpuUsage(processors) {
+    let totalKernelTime = 0;
+    let totalUserTime = 0;
+    let totalTime = 0;
+
+    processors.forEach(procInfo => {
+        totalKernelTime += procInfo.usage.kernel;
+        totalUserTime += procInfo.usage.user;
+        totalTime += procInfo.usage.total;
+    });
+
+    const usagePercentage = ((totalKernelTime + totalUserTime) / totalTime) * 100;
+
+    return {
+        totalCores: processors.length,
+        usagePercentage: usagePercentage
+    };
 }
 
 function getMemUsage() {
