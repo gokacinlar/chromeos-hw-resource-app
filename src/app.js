@@ -1,9 +1,5 @@
 // Function to read CPU information
 
-// add function to display current cpu usage
-// add function to display storage usage in a progress bar
-// add function to display available mem usage in a progress bar 
-
 
 document.addEventListener("DOMContentLoaded", function () {
     initSystemInfo();
