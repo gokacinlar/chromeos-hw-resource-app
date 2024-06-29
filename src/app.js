@@ -1,6 +1,3 @@
-// Function to read CPU information
-
-
 document.addEventListener("DOMContentLoaded", function () {
     initSystemInfo();
 });
@@ -85,13 +82,19 @@ function updateProcessorUsage(cpuInfo, cpuRuntimeInfoDiv) {
         cpuRuntimeInfoDiv.appendChild(overallCpuUsageHolder);
 
         // Find the progress bar inside the cpuRuntimeInfoDiv
-        const progressBar = document.getElementById("progressBar");
+        const progressBar = document.getElementById("cpuProgressBar");
         if (progressBar) {
             // Update the width of the progress bar & text inside it based on CPU usage
             progressBar.style.width = `${cpuDetailObj.usagePercentage.toFixed(2)}%`;
+            const progressBarWidth = parseFloat(progressBar.style.width);
+            if (progressBarWidth >= 50) {
+                progressBar.setAttribute("class", "progress-bar progress-bar-striped progress-bar-animated bg-warning");
+            } else if (progressBarWidth >= 75) {
+                progressBar.setAttribute("class", "progress-bar progress-bar-striped progress-bar-animated bg-danger");
+            }
             // progressBar.textContent = `${cpuDetailObj.usagePercentage.toFixed(2)}%`;
         } else {
-            console.log("error retrieveing progess bar");
+            console.log("Progress bar element could not be found.");
         }
     });
 }
@@ -174,8 +177,8 @@ function getMemUsage() {
                 const availableCapacityBytes = memInfo.availableCapacity;
                 const capacityBytes = memInfo.capacity;
 
-                let availableCapacityGB = convertBytesToGb(availableCapacityBytes);
-                let totalCapacityGB = convertBytesToGb(capacityBytes);
+                const availableCapacityGB = convertBytesToGb(availableCapacityBytes);
+                const totalCapacityGB = convertBytesToGb(capacityBytes);
 
                 // Hide spinners once memory info is loaded
                 availableMemSpinner.style.display = "none";
@@ -183,6 +186,14 @@ function getMemUsage() {
 
                 availableMemDiv.textContent = `Available Capacity: ${availableCapacityGB} GB`;
                 totalMemDiv.textContent = `Total Capacity: ${totalCapacityGB} GB`;
+
+                // Calculate the percentage of used & total memory to display in the progress bar
+                const usedMemoryGB = totalCapacityGB - availableCapacityGB;
+                const usedMemoryPercentage = (usedMemoryGB / totalCapacityGB) * 100;
+
+                const availableMemVisualized = document.getElementById("avMemProgressBar");
+                availableMemVisualized.style.width = `${usedMemoryPercentage.toFixed(2)}%`;
+                availableMemVisualized.textContent = `${usedMemoryPercentage.toFixed(2)}%`;
 
                 availableMemDiv.classList.add("fs-5");
                 totalMemDiv.classList.add("fs-5");
@@ -192,6 +203,7 @@ function getMemUsage() {
         console.error("Memory content elements not found.");
     }
 }
+
 
 function getStorageUsage() {
     chrome.system.storage.getInfo(function (storageInfo) {
