@@ -83,21 +83,65 @@ function updateProcessorUsage(cpuInfo, cpuRuntimeInfoDiv) {
         }
         const overallCpuUsageHolder = createParagraph(`CPU Usage: ${cpuDetailObj.usagePercentage.toFixed(2)}%`, "my-0");
         cpuRuntimeInfoDiv.appendChild(overallCpuUsageHolder);
+
+        // Find the progress bar inside the cpuRuntimeInfoDiv
+        const progressBar = document.getElementById("progressBar");
+        if (progressBar) {
+            // Update the width of the progress bar & text inside it based on CPU usage
+            progressBar.style.width = `${cpuDetailObj.usagePercentage.toFixed(2)}%`;
+            // progressBar.textContent = `${cpuDetailObj.usagePercentage.toFixed(2)}%`;
+        } else {
+            console.log("error retrieveing progess bar");
+        }
     });
 }
 
-function calculateCpuUsage(processors) {
-    let totalKernelTime = 0;
-    let totalUserTime = 0;
-    let totalTime = 0;
+let previousCpuTimes = null;
 
-    processors.forEach(procInfo => {
-        totalKernelTime += procInfo.usage.kernel;
-        totalUserTime += procInfo.usage.user;
-        totalTime += procInfo.usage.total;
+function calculateCpuUsage(processors) {
+    const cpuObj = {
+        totalKernelTime: 0,
+        totalUserTime: 0,
+        totalIdleTime: 0,
+        totalTime: 0
+    }
+
+    // Initialize or update previous CPU times if not already done
+    if (!previousCpuTimes) {
+        previousCpuTimes = processors.map(procInfo => ({
+            kernel: procInfo.usage.kernel,
+            user: procInfo.usage.user,
+            idle: procInfo.usage.idle,
+            total: procInfo.usage.total
+        }));
+        return {
+            totalCores: processors.length,
+            usagePercentage: 0  // Initial call returns 0% usage
+        };
+    }
+
+    processors.forEach((procInfo, index) => {
+        const prevProcInfo = previousCpuTimes[index];
+        const kernelDiff = procInfo.usage.kernel - prevProcInfo.kernel;
+        const userDiff = procInfo.usage.user - prevProcInfo.user;
+        const idleDiff = procInfo.usage.idle - prevProcInfo.idle;
+        const totalDiff = kernelDiff + userDiff + idleDiff;
+
+        cpuObj.totalKernelTime += kernelDiff;
+        cpuObj.totalUserTime += userDiff;
+        cpuObj.totalIdleTime += idleDiff;
+        cpuObj.totalTime += totalDiff;
+
+        // Update previous times with current values
+        previousCpuTimes[index] = {
+            kernel: procInfo.usage.kernel,
+            user: procInfo.usage.user,
+            idle: procInfo.usage.idle,
+            total: procInfo.usage.total
+        };
     });
 
-    const usagePercentage = ((totalKernelTime + totalUserTime) / totalTime) * 100;
+    const usagePercentage = ((cpuObj.totalKernelTime + cpuObj.totalUserTime) / cpuObj.totalTime) * 100;
 
     return {
         totalCores: processors.length,
