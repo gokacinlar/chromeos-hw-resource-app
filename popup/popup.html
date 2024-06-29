@@ -16,7 +16,7 @@
 
 <body id="contentHolder">
     <main id="banner"
-        class="col-12 w-100 d-flex flex-column gap-5 bg-black text-light px-3 py-3 position-relative pe-none user-select-none">
+        class="col-12 w-100 d-flex flex-column gap-2 bg-black text-light px-3 py-3 position-relative pe-none user-select-none">
         <div id="bannerContent">
             <section class="d-flex flex-row gap-5 align-items-center justify-content-center pe-none user-select-none">
                 <div>
@@ -53,7 +53,7 @@
                         </div>
                         <div id="cpuRuntimeInfoVisualized">
                             <div class="progress">
-                                <div id="progressBar"
+                                <div id="cpuProgressBar"
                                     class="progress-bar progress-bar-striped progress-bar-animated bg-primary">
                                 </div>
                             </div>
@@ -61,15 +61,33 @@
                     </div>
                 </div>
             </div>
-            <div class="py-2 gap-2 d-flex flex-column align-items-center justify-content-start">
+            <div class="py-2 gap-2 d-flex flex-column">
                 <div class="w-100 bg-warning text-black text-center rounded-2 px-2 py-2">
                     <h2 class="display-6 fw-normal mt-0 mb-0">
                         RAM (Memory)
                     </h2>
                 </div>
                 <div id="memContent">
-                    <div id="totalMemContent"></div>
-                    <div id="availableMemContent"></div>
+                    <div class="d-flex flex-row align-content-start justify-content-start gap-4">
+                        <div class="col-6" id="totalMemContent"></div>
+                        <div class="col-6" id="totalMemVisualized">
+                            <div class="progress">
+                                <div id="totMemProgressBar"
+                                    class="progress-bar progress-bar-striped progress-bar-animated bg-primary">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row align-content-start justify-content-start">
+                        <div class="col-6" id="availableMemContent"></div>
+                        <div class="col-6" id="availableMemVisualized">
+                            <div class="progress">
+                                <div id="avMemProgressBar"
+                                    class="progress-bar progress-bar-striped progress-bar-animated bg-primary fs-5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="py-2 gap-2 d-flex flex-column align-items-start justify-content-start">
