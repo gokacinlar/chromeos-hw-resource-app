@@ -6,6 +6,30 @@ function initSystemInfo() {
     getCpuUsage();
     getMemUsage();
     getStorageUsage();
+    setDocumentStyling();
+}
+
+function setDocumentStyling() {
+    const documentObject = {
+        hardwareContainer: "hw-info-div col-12 py-2 gap-2 d-flex flex-column align-items-start justify-content-start",
+        hwTitleBg: "hw-info-title w-100 bg-primary text-white text-center rounded-2 px-2 py-2",
+        hwTitleName: "display-6 fw-normal mt-0 mb-0"
+    }
+
+    const hwInfoDiv = document.querySelectorAll(".hw-info-div");
+    hwInfoDiv.forEach((element) => {
+        element.setAttribute("class", documentObject.hardwareContainer)
+    })
+
+    const hwTitleDiv = document.querySelectorAll(".hw-info-title");
+    hwTitleDiv.forEach((element) => {
+        element.setAttribute("class", documentObject.hwTitleBg)
+    })
+
+    const hwTitleName = document.querySelectorAll(".hw-title-name");
+    hwTitleName.forEach((element) => {
+        element.setAttribute("class", documentObject.hwTitleName)
+    })
 }
 
 function getCpuUsage() {
@@ -241,26 +265,31 @@ function convertBytesToGb(bytes) {
     return (bytes / (1024 * 1024 * 1024)).toFixed(2);
 }
 
+let cpuArchInfo = {
+    caiClass: "img-fluid object-fit-cover rounded-3 mx-0 my-0",
+    caiStyling: "width: 64px !important;"
+}
+
 function insertArchitectureIntel(divName) {
     const intel = document.createElement("img");
-    intel.setAttribute("class", "img-fluid object-fit-cover rounded-3 mx-0 my-0");
-    intel.setAttribute("style", "width: 64px !important;")
+    intel.setAttribute("class", cpuArchInfo.caiClass);
+    intel.setAttribute("style", cpuArchInfo.caiStyling)
     intel.setAttribute("src", "/images/intel.png");
     divName.appendChild(intel);
 }
 
 function insertArchitectureAmd(divName) {
     const amd = document.createElement("img");
-    amd.setAttribute("class", "img-fluid object-fit-cover rounded-3 mx-0 my-0");
-    amd.setAttribute("style", "width: 64px !important;")
+    amd.setAttribute("class", cpuArchInfo.caiClass);
+    amd.setAttribute("style", cpuArchInfo.caiStyling)
     amd.setAttribute("src", "/images/amd.png");
     divName.appendChild(amd);
 }
 
 function insertArchitectureArm(divName) {
     const arm = document.createElement("img");
-    arm.setAttribute("class", "img-fluid object-fit-cover rounded-3 mx-0 my-0");
-    arm.setAttribute("style", "width: 64px !important;")
+    arm.setAttribute("class", cpuArchInfo.caiClass);
+    arm.setAttribute("style", cpuArchInfo.caiStyling)
     arm.setAttribute("src", "/images/arm.png");
     divName.appendChild(arm);
 }
