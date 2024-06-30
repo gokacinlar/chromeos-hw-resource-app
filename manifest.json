@@ -22,9 +22,7 @@
         }
     ],
     "permissions": [
-        "activeTab",
-        "storage",
-        "scripting",    
+        "activeTab",   
         "system.cpu",
         "system.memory",
         "system.storage",
