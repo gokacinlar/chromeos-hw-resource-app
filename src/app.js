@@ -89,7 +89,9 @@ function updateProcessorUsage(cpuInfo, cpuRuntimeInfoDiv) {
             const progressBarWidth = parseFloat(progressBar.style.width);
             if (progressBarWidth >= 50) {
                 progressBar.setAttribute("class", "progress-bar progress-bar-striped progress-bar-animated bg-warning");
-            } else if (progressBarWidth >= 75) {
+            }
+
+            if (progressBarWidth >= 75) {
                 progressBar.setAttribute("class", "progress-bar progress-bar-striped progress-bar-animated bg-danger");
             }
             // progressBar.textContent = `${cpuDetailObj.usagePercentage.toFixed(2)}%`;
@@ -207,25 +209,30 @@ function getMemUsage() {
 
 function getStorageUsage() {
     chrome.system.storage.getInfo(function (storageInfo) {
+        console.log(storageInfo);
         const storageDiv = document.getElementById("storageContent");
         for (let i in storageInfo) {
             let storageObj = storageInfo[i];
 
             const storagePlaceHolderObj = {
-                storageName: storageObj.name,
+                storageName: storageObj.name.replace(/\u0000/g, ""), // Replace \u0000 with regex (ai)
                 storageId: storageObj.id,
                 storageCapacity: storageObj.capacity
             }
 
             console.log(storagePlaceHolderObj.storageName, storagePlaceHolderObj.storageId, storagePlaceHolderObj.storageCapacity);
 
-            const ul = document.createElement("ul");
-            const li = document.createElement("li")
+            const storageUl = document.createElement("ul");
+            const storageLi = document.createElement("li");
 
-            li.textContent = `${convertBytesToGb(storagePlaceHolderObj.storageCapacity)} GB`;
+            if (storagePlaceHolderObj.storageName.length === 0) {
+                storageLi.textContent = `Storage Name: null ${convertBytesToGb(storagePlaceHolderObj.storageCapacity)} GB`;
+            } else {
+                storageLi.textContent = `Storage Name: ${storagePlaceHolderObj.storageName} ${convertBytesToGb(storagePlaceHolderObj.storageCapacity)} GB`;
+            }
 
-            storageDiv.appendChild(ul);
-            ul.appendChild(li);
+            storageDiv.appendChild(storageUl);
+            storageUl.appendChild(storageLi);
         }
     });
 }
