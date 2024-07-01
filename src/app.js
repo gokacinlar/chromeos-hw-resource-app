@@ -111,12 +111,19 @@ function updateProcessorUsage(cpuInfo, cpuRuntimeInfoDiv) {
             // Update the width of the progress bar & text inside it based on CPU usage
             progressBar.style.width = `${cpuDetailObj.usagePercentage.toFixed(2)}%`;
             const progressBarWidth = parseFloat(progressBar.style.width);
-            if (progressBarWidth >= 50) {
-                progressBar.setAttribute("class", "progress-bar progress-bar-striped progress-bar-animated bg-warning");
+            const progressBarStyling = {
+                basicStyling: "progress-bar progress-bar-striped progress-bar-animated",
+                bgp: "bg-primary",
+                bgw: "bg-warning",
+                bgd: "bg-danger"
             }
 
-            if (progressBarWidth >= 75) {
-                progressBar.setAttribute("class", "progress-bar progress-bar-striped progress-bar-animated bg-danger");
+            if (progressBarWidth < 50) {
+                progressBar.setAttribute("class", `${progressBarStyling.basicStyling} ${progressBarStyling.bgp}`);
+            } else if (progressBarWidth >= 50) {
+                progressBar.setAttribute("class", `${progressBarStyling.basicStyling} ${progressBarStyling.bgw}`);
+            } else if (progressBarWidth >= 75) {
+                progressBar.setAttribute("class", `${progressBarStyling.basicStyling} ${progressBarStyling.bgd}`);
             }
             // progressBar.textContent = `${cpuDetailObj.usagePercentage.toFixed(2)}%`;
         } else {
