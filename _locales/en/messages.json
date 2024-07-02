@@ -1,6 +1,6 @@
 {
     "extensionName": {
-        "message": "ChromeOS Hardware Info",
+        "message": "Hardware Info & Monitor Utility for ChromeOS",
         "description": "Name of the extension."
     },
     "extensionDescription": {
