@@ -1,5 +1,7 @@
 # Hardware Info & Monitor Utility for ChromeOS
 
+![Logo](images/logo.png)
+
 This extension allows ChromeOS users to see their hardware details and monitor their hardware usage **without leaving the browser.**
 
 ## Usage
