@@ -1,7 +1,7 @@
 {
     "name": "Hardware Info & Monitor Utility for ChromeOS",
     "author": "Derviş Öksüzoğlu",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "manifest_version": 3,
     "incognito": "not_allowed",
     "description": "Simple & Powerful Hardware Information Utility for ChromeOS.",
@@ -16,17 +16,21 @@
     },
     "content_scripts": [
         {
-            "matches": ["<all_urls>"],
-            "css": ["/assets/css/styles.css"],
-            "js": ["/src/app.js"]
+            "matches": [
+                "<all_urls>"
+            ],
+            "css": [
+                "/assets/css/styles.css"
+            ],
+            "js": [
+                "/src/app.js"
+            ]
         }
     ],
     "permissions": [
-        "activeTab",   
         "system.cpu",
         "system.memory",
-        "system.storage",
-        "system.display"
+        "system.storage"
     ],
     "action": {
         "default_popup": "popup/popup.html",
