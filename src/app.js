@@ -120,7 +120,7 @@ function updateProcessorUsage(cpuInfo, cpuRuntimeInfoDiv) {
 
             if (progressBarWidth < 50) {
                 progressBar.setAttribute("class", `${progressBarStyling.basicStyling} ${progressBarStyling.bgp}`);
-            } else if (progressBarWidth >= 50) {
+            } else if (progressBarWidth >= 50 && progressBarWidth <= 75) {
                 progressBar.setAttribute("class", `${progressBarStyling.basicStyling} ${progressBarStyling.bgw}`);
             } else if (progressBarWidth >= 75) {
                 progressBar.setAttribute("class", `${progressBarStyling.basicStyling} ${progressBarStyling.bgd}`);
@@ -240,7 +240,6 @@ function getMemUsage() {
 
 function getStorageUsage() {
     chrome.system.storage.getInfo(function (storageInfo) {
-        console.log(storageInfo);
         const storageDiv = document.getElementById("storageContent");
         for (let i in storageInfo) {
             let storageObj = storageInfo[i];
@@ -250,8 +249,6 @@ function getStorageUsage() {
                 storageId: storageObj.id,
                 storageCapacity: storageObj.capacity
             }
-
-            console.log(storagePlaceHolderObj.storageName, storagePlaceHolderObj.storageId, storagePlaceHolderObj.storageCapacity);
 
             const storageUl = document.createElement("ul");
             const storageLi = document.createElement("li");
