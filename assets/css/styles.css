@@ -3,12 +3,11 @@
     height: fit-content;
 }
 
-/* Usage Indicators Initial Stage */
+/* Modified */
 
 .progress {
     height: 32px !important;
 }
-
 
 .hardware-name {
     width: 10%;
