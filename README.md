@@ -14,9 +14,7 @@ Extension is available in [Chrome Web Store](https://chromewebstore.google.com/d
 
 ## Usage
 
-Extension will be accessible upon Google Chrome Web Store approval.
-
-On the other hand, if you want to run the extension locally, follow these steps:
+If you want to run the extension locally, follow these steps:
 
 1. Clone the repository (or download the source code)
 2. Unpack the extension by going in your browser:
