@@ -10,7 +10,7 @@ This extension allows ChromeOS users to see their hardware details and monitor t
 
 ## Availability
 
-Extension is available in ![Chrome Web Store](https://chromewebstore.google.com/detail/hardware-info-monitor-uti/mjllediiidddcngjipoicbonnchchifc?authuser=0&hl=en).
+Extension is available in [Chrome Web Store](https://chromewebstore.google.com/detail/hardware-info-monitor-uti/mjllediiidddcngjipoicbonnchchifc?authuser=0&hl=en).
 
 ## Usage
 
