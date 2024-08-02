@@ -1,11 +1,10 @@
-document.addEventListener("DOMContentLoaded", function () {
-    initSystemInfo();
-});
+document.addEventListener("DOMContentLoaded", initSystemInfo());
 
 function initSystemInfo() {
     getCpuUsage();
     getMemUsage();
     getStorageUsage();
+    getDisplayInfo();
     setDocumentStyling();
 }
 
@@ -74,27 +73,9 @@ function displayCpuInfo(cpuInfo, cpuDivsObj) {
     cpuDivsObj.cpuArchitectureDiv.appendChild(cpuArchitectureInfoHolder);
     setArchitecture(cpuInfo, cpuDivsObj.cpuArchitectureDiv);
 
-    const totalCoresHolder = createParagraph(`Total CPU Cores: ${cpuInfo.processors.length}`, "my-0");
+    const totalCoresHolder = createParagraph(`Total CPU Cores: ${cpuInfo.processors.length} cores.`, "my-0");
     cpuDivsObj.cpuCoreInfoDiv.appendChild(totalCoresHolder);
 }
-
-function createParagraph(text, className) {
-    const p = document.createElement("p");
-    p.setAttribute("class", className);
-    p.textContent = text;
-    return p;
-}
-
-function setArchitecture(cpuInfo, cpuArchitectureDiv) {
-    if (cpuInfo.archName === "x86_64" || cpuInfo.archName === "x86") {
-        insertArchitectureIntel(cpuArchitectureDiv);
-    } else if (!cpuInfo.modelName.includes("Intel(R)") && cpuInfo.modelName.includes("AMD")) {
-        insertArchitectureAmd(cpuArchitectureDiv);
-    } else if (cpuInfo.archName === "arm64" || cpuInfo.archName === "arm") {
-        insertArchitectureArm(cpuArchitectureDiv);
-    }
-}
-
 function updateProcessorUsage(cpuInfo, cpuRuntimeInfoDiv) {
     chrome.system.cpu.getInfo(function (updatedCpuInfo) {
         const cpuDetailObj = calculateCpuUsage(updatedCpuInfo.processors);
@@ -185,13 +166,7 @@ function calculateCpuUsage(processors) {
     };
 }
 
-function createSpinner(spinner, divName) {
-    spinner = document.createElement("div");
-    spinner.setAttribute("class", "spinner-border text-white");
-    divName.appendChild(spinner);
-    return spinner;
-}
-
+// Function to get memory usage
 function getMemUsage() {
     const availableMemDiv = document.getElementById("availableMemContent");
     const totalMemDiv = document.getElementById("totalMemContent");
@@ -226,7 +201,7 @@ function getMemUsage() {
 
                 const availableMemVisualized = document.getElementById("avMemProgressBar");
                 availableMemVisualized.style.width = `${usedMemoryPercentage.toFixed(2)}%`;
-                availableMemVisualized.textContent = `${usedMemoryPercentage.toFixed(2)}%`;
+                availableMemVisualized.textContent = `${usedMemoryPercentage.toFixed(2)}% used`;
 
                 availableMemDiv.classList.add("fs-5");
                 totalMemDiv.classList.add("fs-5");
@@ -237,10 +212,15 @@ function getMemUsage() {
     }
 }
 
-
+// Function to get Storage Usage Information from user
+// NOTE: There could be problem with listing storage names & their total spaces
+// since it sometimes returns NULL, sometimes returns name of the storage
+// without its capacity shown.
 function getStorageUsage() {
     chrome.system.storage.getInfo(function (storageInfo) {
         const storageDiv = document.getElementById("storageContent");
+        const storageUl = document.createElement("ul");
+
         for (let i in storageInfo) {
             let storageObj = storageInfo[i];
 
@@ -249,8 +229,6 @@ function getStorageUsage() {
                 storageId: storageObj.id,
                 storageCapacity: storageObj.capacity
             }
-
-            const storageUl = document.createElement("ul");
             const storageLi = document.createElement("li");
 
             if (storagePlaceHolderObj.storageName.length === 0) {
@@ -263,6 +241,65 @@ function getStorageUsage() {
             storageUl.appendChild(storageLi);
         }
     });
+}
+
+// Function to get Display Information from user hardware
+function getDisplayInfo() {
+    chrome.system.display.getInfo(function (displayInfo) {
+        for (let i in displayInfo) {
+
+            const displayJsonInfoProperties = {
+                displayInfoMonitorName: displayInfo[i].name,
+                displayInfoBoundX: displayInfo[i].bounds.width,
+                displayInfoBoundY: displayInfo[i].bounds.height,
+                displayInfoTouchSupport: displayInfo[i].hasTouchSupport,
+                displayInfoAccelerometerSupport: displayInfo[i].hasAccelerometerSupport,
+                displayInfoDpiX: displayInfo[i].dpiX,
+                displayInfoDpiY: displayInfo[i].dpiY,
+            }
+
+            const displayDiv = document.getElementById("displayDiv");
+            const displayUl = document.createElement("ul");
+            displayDiv.classList.add("fs-5");
+
+            for (let [key, value] of Object.entries(displayJsonInfoProperties)) {
+                console.log(key + ": " + value);
+                const displayLi = document.createElement("li");
+                displayLi.appendChild(document.createTextNode([key, value]));
+                displayUl.appendChild(displayLi);
+            }
+
+            displayDiv.appendChild(displayUl);
+        }
+    });
+}
+
+/**
+ * Helper Functions
+ */
+
+function createParagraph(text, className) {
+    const p = document.createElement("p");
+    p.setAttribute("class", className);
+    p.textContent = text;
+    return p;
+}
+
+function setArchitecture(cpuInfo, cpuArchitectureDiv) {
+    if (cpuInfo.archName === "x86_64" || cpuInfo.archName === "x86") {
+        insertArchitectureIntel(cpuArchitectureDiv);
+    } else if (!cpuInfo.modelName.includes("Intel(R)") && cpuInfo.modelName.includes("AMD")) {
+        insertArchitectureAmd(cpuArchitectureDiv);
+    } else if (cpuInfo.archName === "arm64" || cpuInfo.archName === "arm") {
+        insertArchitectureArm(cpuArchitectureDiv);
+    }
+}
+
+function createSpinner(spinner, divName) {
+    spinner = document.createElement("div");
+    spinner.setAttribute("class", "spinner-border text-white");
+    divName.appendChild(spinner);
+    return spinner;
 }
 
 function convertBytesToGb(bytes) {
