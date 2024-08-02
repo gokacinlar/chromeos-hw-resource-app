@@ -1,6 +1,6 @@
 // Check if the current OS is ChromeOS or not
 chrome.runtime.getPlatformInfo((info) => {
-    if (info.os !== "cros" && info.os !== "win") {
+    if (info.os !== "cros") {
         preventExtensionRunning();
     } else {
         return console.log("Extension is running in ChromeOS.")
