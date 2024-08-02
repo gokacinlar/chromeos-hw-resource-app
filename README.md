@@ -4,11 +4,17 @@
 
 This extension allows ChromeOS users to see their hardware details and monitor their hardware usage **without leaving the browser.**
 
+## Browser Compatibility
+
+- Google Chrome & Chromium derivatives
+
+## Availability
+
+Extension is available in [Chrome Web Store](https://chromewebstore.google.com/detail/hardware-info-monitor-uti/mjllediiidddcngjipoicbonnchchifc?authuser=0&hl=en).
+
 ## Usage
 
-Extension will be accessible upon Google Chrome Web Store approval.  
-
-On the other hand, if you want to run the extension locally, follow these steps:
+If you want to run the extension locally, follow these steps:
 
 1. Clone the repository (or download the source code)
 2. Unpack the extension by going in your browser:
