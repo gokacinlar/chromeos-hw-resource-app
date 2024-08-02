@@ -30,7 +30,8 @@
     "permissions": [
         "system.cpu",
         "system.memory",
-        "system.storage"
+        "system.storage",
+        "system.display"
     ],
     "action": {
         "default_popup": "popup/popup.html",
