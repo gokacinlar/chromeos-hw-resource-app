@@ -263,7 +263,6 @@ function getDisplayInfo() {
             const displayUl = document.createElement("ul");
 
             for (let [key, value] of Object.entries(displayJsonInfoProperties)) {
-                console.log(`${key}: ${value}`);
                 const displayLi = document.createElement("li");
                 displayLi.textContent = `${key}: ${value}`;
                 displayUl.appendChild(displayLi);
