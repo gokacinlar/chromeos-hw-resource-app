@@ -15,10 +15,9 @@
 </head>
 
 <body id="contentHolder">
-    <main id="banner"
-        class="col-12 w-100 d-flex flex-column gap-2 bg-black text-light px-3 py-3 position-relative pe-none user-select-none">
+    <main id="banner" class="col-12 w-100 d-flex flex-column gap-2 bg-black text-light px-3 py-3 position-relative">
         <div id="bannerContent" class="col-12 d-flex flex-column justify-content-center px-2">
-            <section class="d-flex flex-row gap-2 align-items-center justify-content-center pe-none user-select-none">
+            <section class="d-flex flex-row gap-2 align-items-center justify-content-center">
                 <div>
                     <img class="img-fluid rounded-3" src="/icons/icon_128x128.png" alt="ChromeOS Resource Monitor"
                         title="ChromeOS Resource Monitor">
@@ -33,19 +32,15 @@
         <section id="hardwareInfoDiv" class="col-12 d-flex flex-column justify-content-center px-2 py-2">
             <div class="hw-info-div">
                 <div class="hw-info-title">
-                    <h2 class="hw-title-name">
-                        CPU (Processor)
-                    </h2>
+                    <h2 class="hw-title-name">CPU (Processor)</h2>
                 </div>
-                <div id="cpuContent" class="d-flex flex-row align-items-center gap-2">
+                <div id="cpuContent" class="col-12 d-flex flex-row align-items-center gap-2">
                     <div id="cpuArchitecture"
                         class="col-2 d-flex flex-column-reverse align-items-start justify-content-center gap-1">
                     </div>
-                    <div class="col-6 d-flex flex-column align-items-start justify-content-between gap-1">
-                        <div id="cpuNameInfo">
-                        </div>
-                        <div id="cpuCoreInfo">
-                        </div>
+                    <div class="col-6 d-flex flex-column align-items-start justify-content-start gap-1">
+                        <div id="cpuNameInfo"></div>
+                        <div id="cpuCoreInfo"></div>
                     </div>
                     <div>
                         <div id="cpuRuntimeInfo"
@@ -63,27 +58,20 @@
             </div>
             <div class="hw-info-div">
                 <div class="hw-info-title">
-                    <h2 class="hw-title-name">
-                        RAM (Memory)
-                    </h2>
+                    <h2 class="hw-title-name">RAM (Memory)</h2>
                 </div>
                 <div id="memContent" class="w-100">
-                    <div class="d-flex flex-row align-content-start justify-content-start gap-4">
-                        <div class="col-6" id="totalMemContent"></div>
-                        <div class="col-6" id="totalMemVisualized">
-                            <div class="progress">
-                                <div id="totMemProgressBar"
-                                    class="progress-bar progress-bar-striped progress-bar-animated bg-primary">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="d-flex flex-row align-content-start justify-content-start">
-                        <div class="col-6" id="availableMemContent"></div>
-                        <div class="col-6" id="availableMemVisualized">
-                            <div class="progress progress-bar-striped">
-                                <div id="avMemProgressBar"
-                                    class="progress-bar progress-bar-striped progress-bar-animated bg-primary fs-5">
+                        <div id="memTextInfo" class="col-6">
+                            <div id="totalMemContent"></div>
+                            <div id="availableMemContent"></div>
+                        </div>
+                        <div id="availableMemoryContent" class="col-6 d-flex align-items-center justify-content-center">
+                            <div id="availableMemVisualized" class="w-100">
+                                <div class="progress progress-bar-striped">
+                                    <div id="avMemProgressBar"
+                                        class="progress-bar progress-bar-striped progress-bar-animated bg-primary fs-5">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -92,24 +80,22 @@
             </div>
             <div class="hw-info-div">
                 <div class="hw-info-title">
-                    <h2 class="hw-title-name">
-                        SSD & Removables (Storage)
-                    </h2>
+                    <h2 class="hw-title-name">SSD & Removables (Storage)</h2>
                 </div>
                 <div id="storageContent" class="fs-5"></div>
             </div>
             <div class="hw-info-div">
                 <div class="hw-info-title">
-                    <h2 class="hw-title-name">
-                        Display (Monitors)
-                    </h2>
+                    <h2 class="hw-title-name">Display (Monitors)</h2>
                 </div>
                 <div id="displayContent" class="fs-5"></div>
             </div>
         </section>
     </main>
+    <!--Scripts-->
     <script src="/src/app.js"></script>
     <script src="/src/background/service_worker.js"></script>
+    <!--End of Scripts-->
 </body>
 
 </html>
