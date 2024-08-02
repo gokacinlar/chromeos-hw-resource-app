@@ -246,26 +246,26 @@ function getStorageUsage() {
 // Function to get Display Information from user hardware
 function getDisplayInfo() {
     chrome.system.display.getInfo(function (displayInfo) {
+        const displayDiv = document.getElementById("displayContent");
+        displayDiv.classList.add("fs-5");
+
         for (let i in displayInfo) {
-
             const displayJsonInfoProperties = {
-                displayInfoMonitorName: displayInfo[i].name,
-                displayInfoBoundX: displayInfo[i].bounds.width,
-                displayInfoBoundY: displayInfo[i].bounds.height,
-                displayInfoTouchSupport: displayInfo[i].hasTouchSupport,
-                displayInfoAccelerometerSupport: displayInfo[i].hasAccelerometerSupport,
-                displayInfoDpiX: displayInfo[i].dpiX,
-                displayInfoDpiY: displayInfo[i].dpiY,
-            }
+                "Monitor Name": displayInfo[i].name,
+                "Width (px)": displayInfo[i].bounds.width,
+                "Height (px)": displayInfo[i].bounds.height,
+                "Touch Support": displayInfo[i].hasTouchSupport ? "Yes" : "No",
+                "Accelerometer Support": displayInfo[i].hasAccelerometerSupport ? "Yes" : "No",
+                "DPI X": displayInfo[i].dpiX,
+                "DPI Y": displayInfo[i].dpiY,
+            };
 
-            const displayDiv = document.getElementById("displayDiv");
             const displayUl = document.createElement("ul");
-            displayDiv.classList.add("fs-5");
 
             for (let [key, value] of Object.entries(displayJsonInfoProperties)) {
-                console.log(key + ": " + value);
+                console.log(`${key}: ${value}`);
                 const displayLi = document.createElement("li");
-                displayLi.appendChild(document.createTextNode([key, value]));
+                displayLi.textContent = `${key}: ${value}`;
                 displayUl.appendChild(displayLi);
             }
 
@@ -273,6 +273,7 @@ function getDisplayInfo() {
         }
     });
 }
+
 
 /**
  * Helper Functions
