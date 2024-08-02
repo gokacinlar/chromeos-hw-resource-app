@@ -35,3 +35,4 @@ This extension is **intended to work in only ChromeOS.** However, you may use it
 - system.cpu
 - system.storage
 - system.memory
+- system.display
