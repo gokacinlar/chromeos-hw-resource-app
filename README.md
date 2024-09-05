@@ -22,6 +22,14 @@ If you want to run the extension locally, follow these steps:
 3. Enjoy!
 4. If you encounter an error with *"_config.yml"*, just delete it and load the extension.
 
+## Features
+
+- List CPU Information & Usage Statistics
+- List RAM Usage Statistics
+- List GPU Information
+- List Storage Information
+- List Display Information
+
 ## Note
 
 This extension is **intended to work in only ChromeOS.** However, you may use it in Linux, MacOS or Windows on any Chromium-based browser if you know what you're doing.
