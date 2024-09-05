@@ -2,10 +2,45 @@ document.addEventListener("DOMContentLoaded", initSystemInfo());
 
 function initSystemInfo() {
     getCpuUsage();
+    getGraphicsInfo();
     getMemUsage();
     getStorageUsage();
     getDisplayInfo();
     setDocumentStyling();
+    blurContent();
+}
+
+// Function to blur content based on tab switching
+function blurContent() {
+    // Define elements
+    const tabsConfig = {
+        monitorTab: {
+            button: document.querySelector(".hwmonitor-btn"),
+            tab: document.querySelector("#hardwareMonitoringDiv")
+        },
+        infoTab: {
+            button: document.querySelector(".hwinfo-btn"),
+            tab: document.querySelector("#hardwareInfoDiv")
+        }
+    };
+
+    // Blur the Information Div because Monitoring Div is active by default
+    tabsConfig.infoTab.tab.classList.add("blur");
+
+    // Function to update blur state based on the selected tab
+    function updateBlur() {
+        if (tabsConfig.monitorTab.button.checked) {
+            tabsConfig.monitorTab.tab.classList.remove("blur");
+            tabsConfig.infoTab.tab.classList.add("blur");
+        } else if (tabsConfig.infoTab.button.checked) {
+            tabsConfig.infoTab.tab.classList.remove("blur");
+            tabsConfig.monitorTab.tab.classList.add("blur");
+        }
+    }
+
+    // Add change event listeners to the radio buttons
+    tabsConfig.monitorTab.button.addEventListener("change", updateBlur);
+    tabsConfig.infoTab.button.addEventListener("change", updateBlur);
 }
 
 function setDocumentStyling() {
@@ -76,6 +111,7 @@ function displayCpuInfo(cpuInfo, cpuDivsObj) {
     const totalCoresHolder = createParagraph(`Total CPU Cores: ${cpuInfo.processors.length} cores.`, "my-0");
     cpuDivsObj.cpuCoreInfoDiv.appendChild(totalCoresHolder);
 }
+
 function updateProcessorUsage(cpuInfo, cpuRuntimeInfoDiv) {
     chrome.system.cpu.getInfo(function (updatedCpuInfo) {
         const cpuDetailObj = calculateCpuUsage(updatedCpuInfo.processors);
@@ -166,6 +202,66 @@ function calculateCpuUsage(processors) {
     };
 }
 
+// Function to get GPU Information using WebGL API
+function getGraphicsInfo() {
+    const canvas = document.createElement("canvas");
+    let gl;
+
+    // Attempt to get the WebGL rendering context
+    try {
+        gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    } catch (error) {
+        console.error("WebGL not supported:", error);
+        return null; // Return null if WebGL is not supported
+    }
+
+    if (gl) {
+        const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+
+        if (debugInfo) {
+            const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+            const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+
+            return {
+                vendor,
+                renderer
+            };
+        } else {
+            console.warn("WEBGL_debug_renderer_info extension is not supported.");
+            return null; // Return null if the extension is not supported
+        }
+    }
+
+    return null; // Return null if WebGL context creation failed
+}
+
+let cpuArchInfo = {
+    caiClass: "img-fluid object-fit-cover rounded-3 mx-0 my-0",
+    caiStyling: "width: 64px !important;"
+}
+
+const webGLInfo = getGraphicsInfo();
+
+if (webGLInfo) {
+    const gpuVendorDiv = document.getElementById("gpuVendorLogo");
+
+    if (webGLInfo.vendor.includes("AMD")) {
+        insertArchitecture(gpuVendorDiv, "/images/amd.png");
+    } else if (webGLInfo.vendor.includes("Nvidia") && !(webGLInfo.vendor.includes("AMD") && webGLInfo.vendor.includes("Intel"))) {
+        insertArchitecture(gpuVendorDiv, "/images/nvidia.png");
+    } else if (webGLInfo.vendor.includes("Intel") && !(webGLInfo.vendor.includes("AMD") && webGLInfo.vendor.includes("Nvidia"))) {
+        insertArchitecture(gpuVendorDiv, "/images/intel.png");
+    }
+
+    const gpuInfoDiv = document.getElementById("gpuInfo");
+    gpuInfoDiv.textContent = `${webGLInfo.renderer}`;
+
+    // console.log("Vendor:", webGLInfo.vendor);
+    // console.log("Renderer:", webGLInfo.renderer);
+} else {
+    console.log("Failed to retrieve WebGL information.");
+}
+
 // Function to get memory usage
 function getMemUsage() {
     const availableMemDiv = document.getElementById("availableMemContent");
@@ -220,6 +316,7 @@ function getStorageUsage() {
     chrome.system.storage.getInfo(function (storageInfo) {
         const storageDiv = document.getElementById("storageContent");
         const storageUl = document.createElement("ul");
+        storageUl.className = "col-12 w-100 d-flex flex-column gap-2 my-0 py-0 ";
 
         for (let i in storageInfo) {
             let storageObj = storageInfo[i];
@@ -232,9 +329,9 @@ function getStorageUsage() {
             const storageLi = document.createElement("li");
 
             if (storagePlaceHolderObj.storageName.length === 0) {
-                storageLi.textContent = `Storage Name: null ${convertBytesToGb(storagePlaceHolderObj.storageCapacity)} GB`;
+                storageLi.textContent = `Storage Name: null = ${convertBytesToGb(storagePlaceHolderObj.storageCapacity)} GB`;
             } else {
-                storageLi.textContent = `Storage Name: ${storagePlaceHolderObj.storageName} ${convertBytesToGb(storagePlaceHolderObj.storageCapacity)} GB`;
+                storageLi.textContent = `Storage Name: ${storagePlaceHolderObj.storageName} = ${convertBytesToGb(storagePlaceHolderObj.storageCapacity)} GB`;
             }
 
             storageDiv.appendChild(storageUl);
@@ -273,7 +370,6 @@ function getDisplayInfo() {
     });
 }
 
-
 /**
  * Helper Functions
  */
@@ -285,16 +381,18 @@ function createParagraph(text, className) {
     return p;
 }
 
+// Function to set architecture
 function setArchitecture(cpuInfo, cpuArchitectureDiv) {
     if (cpuInfo.archName === "x86_64" || cpuInfo.archName === "x86") {
-        insertArchitectureIntel(cpuArchitectureDiv);
+        insertArchitecture(cpuArchitectureDiv, "/images/intel.png");
     } else if (!cpuInfo.modelName.includes("Intel(R)") && cpuInfo.modelName.includes("AMD")) {
-        insertArchitectureAmd(cpuArchitectureDiv);
+        insertArchitecture(cpuArchitectureDiv, "/images/amd.png");
     } else if (cpuInfo.archName === "arm64" || cpuInfo.archName === "arm") {
-        insertArchitectureArm(cpuArchitectureDiv);
+        insertArchitecture(cpuArchitectureDiv, "/images/arm.png");
     }
 }
 
+// Function to create a loader spinner
 function createSpinner(spinner, divName) {
     spinner = document.createElement("div");
     spinner.setAttribute("class", "spinner-border text-white");
@@ -306,31 +404,11 @@ function convertBytesToGb(bytes) {
     return (bytes / (1024 * 1024 * 1024)).toFixed(2);
 }
 
-let cpuArchInfo = {
-    caiClass: "img-fluid object-fit-cover rounded-3 mx-0 my-0",
-    caiStyling: "width: 64px !important;"
-}
-
-function insertArchitectureIntel(divName) {
-    const intel = document.createElement("img");
-    intel.setAttribute("class", cpuArchInfo.caiClass);
-    intel.setAttribute("style", cpuArchInfo.caiStyling)
-    intel.setAttribute("src", "/images/intel.png");
-    divName.appendChild(intel);
-}
-
-function insertArchitectureAmd(divName) {
-    const amd = document.createElement("img");
-    amd.setAttribute("class", cpuArchInfo.caiClass);
-    amd.setAttribute("style", cpuArchInfo.caiStyling)
-    amd.setAttribute("src", "/images/amd.png");
-    divName.appendChild(amd);
-}
-
-function insertArchitectureArm(divName) {
-    const arm = document.createElement("img");
-    arm.setAttribute("class", cpuArchInfo.caiClass);
-    arm.setAttribute("style", cpuArchInfo.caiStyling)
-    arm.setAttribute("src", "/images/arm.png");
-    divName.appendChild(arm);
+// Function to insert logo to proper architectures
+function insertArchitecture(divName, imgSource) {
+    const img = document.createElement("img");
+    img.setAttribute("class", cpuArchInfo.caiClass);
+    img.setAttribute("style", cpuArchInfo.caiStyling);
+    img.setAttribute("src", imgSource);
+    divName.appendChild(img);
 }

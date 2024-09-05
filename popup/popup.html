@@ -16,8 +16,8 @@
 
 <body id="contentHolder">
     <main id="banner" class="col-12 w-100 d-flex flex-column gap-2 bg-black text-light px-3 py-3 position-relative">
-        <div id="bannerContent" class="col-12 d-flex flex-column justify-content-center px-2">
-            <section class="d-flex flex-row gap-2 align-items-center justify-content-center">
+        <section id="bannerContent" class="col-12 d-flex flex-column justify-content-center px-2">
+            <div class="d-flex flex-row gap-2 align-items-center justify-content-center">
                 <div>
                     <img class="img-fluid rounded-3" src="/icons/icon_128x128.png" alt="ChromeOS Resource Monitor"
                         title="ChromeOS Resource Monitor">
@@ -27,24 +27,42 @@
                         ChromeOS Hardware Info & Monitor Utility
                     </h1>
                 </div>
-            </section>
-        </div>
-        <section id="hardwareInfoDiv" class="col-12 d-flex flex-column justify-content-center px-2 py-2">
-            <div class="hw-info-div">
-                <div class="hw-info-title">
-                    <h2 class="hw-title-name">CPU (Processor)</h2>
-                </div>
-                <div id="cpuContent" class="col-12 d-flex flex-row align-items-center gap-2">
-                    <div id="cpuArchitecture"
-                        class="col-2 d-flex flex-column-reverse align-items-start justify-content-center gap-1">
+            </div>
+        </section>
+        <section id="tabsDiv" class="col-12 d-flex flex-column px-2 py-2">
+            <div class="tab-switching btn-group btn-group-lg" role="group"
+                aria-label="Switch Between Hardware Stats & Monitoring ">
+                <input type="radio" class="btn-check hwmonitor-btn" name="btnradio" id="hwMonitoring" autocomplete="off"
+                    checked>
+                <label class="d-flex justify-content-around align-items-center btn btn-primary" for="hwMonitoring"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+                        class="bi bi-pie-chart" viewBox="0 0 16 16">
+                        <path
+                            d="M7.5 1.018a7 7 0 0 0-4.79 11.566L7.5 7.793zm1 0V7.5h6.482A7 7 0 0 0 8.5 1.018M14.982 8.5H8.207l-4.79 4.79A7 7 0 0 0 14.982 8.5M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8" />
+                    </svg><span>Hardware
+                        Monitoring</span></label>
+
+                <input type="radio" class="btn-check hwinfo-btn" name="btnradio" id="hwInfo" autocomplete="off">
+                <label class="d-flex justify-content-around align-items-center btn btn-primary" for="hwInfo"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-gear"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+                        <path
+                            d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
+                    </svg><span>Hardware
+                        Information</span></label>
+            </div>
+        </section>
+        <section id="hardwareMonitoringDiv" class="col-12 d-flex flex-column px-2 py-2">
+            <div class="d-flex flex-column gap-4">
+                <section id="cpuMonitoring" class="d-flex flex-column gap-2">
+                    <div class="hw-info-title">
+                        <h2 class="hw-title-name">CPU (Processor)</h2>
                     </div>
-                    <div class="col-6 d-flex flex-column align-items-start justify-content-start gap-1">
-                        <div id="cpuNameInfo"></div>
-                        <div id="cpuCoreInfo"></div>
-                    </div>
-                    <div>
+                    <div class="cpu-monitoring-tab d-flex flex-column gap-2">
                         <div id="cpuRuntimeInfo"
-                            class="d-flex flex-column align-items-center justify-content-center gap-1">
+                            class="d-flex flex-column align-items-start justify-content-center gap-1 fs-4">
                         </div>
                         <div id="cpuRuntimeInfoVisualized">
                             <div class="progress progress-bar-striped">
@@ -54,27 +72,56 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="hw-info-div">
-                <div class="hw-info-title">
-                    <h2 class="hw-title-name">RAM (Memory)</h2>
-                </div>
-                <div id="memContent" class="w-100">
-                    <div class="d-flex flex-row align-content-start justify-content-start">
-                        <div id="memTextInfo" class="col-6">
-                            <div id="totalMemContent"></div>
-                            <div id="availableMemContent"></div>
-                        </div>
-                        <div id="availableMemoryContent" class="col-6 d-flex align-items-center justify-content-center">
-                            <div id="availableMemVisualized" class="w-100">
-                                <div class="progress progress-bar-striped">
-                                    <div id="avMemProgressBar"
-                                        class="progress-bar progress-bar-striped progress-bar-animated bg-primary fs-5">
+                </section>
+                <section id="ramMonitoring" class="d-flex flex-column gap-2">
+                    <div class="hw-info-title">
+                        <h2 class="hw-title-name">RAM (Memory)</h2>
+                    </div>
+                    <div id="memContent" class="w-100">
+                        <div class="d-flex flex-row align-content-start justify-content-start">
+                            <div id="memTextInfo" class="col-6">
+                                <div id="totalMemContent"></div>
+                                <div id="availableMemContent"></div>
+                            </div>
+                            <div id="availableMemoryContent"
+                                class="col-6 d-flex align-items-center justify-content-center">
+                                <div id="availableMemVisualized" class="w-100">
+                                    <div class="progress progress-bar-striped">
+                                        <div id="avMemProgressBar"
+                                            class="progress-bar progress-bar-striped progress-bar-animated bg-primary fs-5">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+        <section id="hardwareInfoDiv" class="col-12 d-flex flex-column justify-content-center px-2 py-2 gap-2">
+            <div class="hw-info-div">
+                <div class="hw-info-title">
+                    <h2 class="hw-title-name">CPU (Processor)</h2>
+                </div>
+                <div id="cpuContent" class="d-flex flex-row gap-2 align-items-center fs-5">
+                    <div id="cpuArchitecture"
+                        class="col-2 d-flex flex-column-reverse align-items-start justify-content-center gap-1">
+                    </div>
+                    <div class="col-10 d-flex flex-column align-items-start justify-content-start gap-1">
+                        <div id="cpuNameInfo"></div>
+                        <div id="cpuCoreInfo"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="hw-info-div">
+                <div class="hw-info-title">
+                    <h2 class="hw-title-name">GPU (Graphics)</h2>
+                </div>
+                <div id="gpuContent" class="d-flex flex-row alig-items-center fs-5">
+                    <div id="gpuVendorLogo"
+                        class="col-2 d-flex flex-column-reverse align-items-start justify-content-center gap-1">
+                    </div>
+                    <div id="gpuInfo" class="col-10 d-flex flex-column align-items-start justify-content-start gap-1">
                     </div>
                 </div>
             </div>
