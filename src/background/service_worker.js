@@ -8,9 +8,14 @@ chrome.runtime.getPlatformInfo((info) => {
 });
 
 const documentElements = {
-    bannerDiv: document.getElementById("banner"),
+    bannerDiv: document.getElementById("banner")
+}
+
+const elemsToBeRemove = {
     bannerHolderDiv: document.getElementById("bannerContent"),
-    usageIndicatorDiv: document.getElementById("hardwareInfoDiv")
+    usageIndicatorDiv: document.getElementById("hardwareInfoDiv"),
+    usageStatsDiv: document.getElementById("hardwareMonitoringDiv"),
+    tabsDiv: document.getElementById("tabsDiv")
 }
 
 function preventExtensionRunning() {
@@ -32,11 +37,20 @@ function preventExtensionRunning() {
 
         errorDiv.textContent = textInfo.errorMessage;
 
+        for (let key in elemsToBeRemove) {
+            if (elemsToBeRemove.hasOwnProperty(key)) {
+                removeElements(elemsToBeRemove[key]);
+            }
+        }
+
         documentElements.bannerDiv.appendChild(errorDiv);
         documentElements.bannerDiv.appendChild(errorDivImg);
-
-        documentElements.bannerHolderDiv.remove();
-        documentElements.usageIndicatorDiv.remove();
     }
     return console.error(textInfo.errorMessage);
+}
+
+function removeElements(elem) {
+    if (elem) {
+        elem.remove();
+    }
 }
