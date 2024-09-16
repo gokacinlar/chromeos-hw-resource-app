@@ -25,8 +25,9 @@ If you want to run the extension locally, follow these steps:
 ## Features
 
 - List CPU Information & Usage Statistics
-- List RAM Usage Statistics
-- List GPU Information
+- List RAM Information & Usage Statistics
+- List GPU Information (Usage stats to be shown is planned)
+- List Network Information (Usage stats to be shown is planned)
 - List Storage Information
 - List Display Information
 
