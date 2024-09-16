@@ -25,3 +25,10 @@
     -ms-filter: blur(5px);
     filter: blur(5px);
 }
+
+.bootstrap-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    aspect-ratio: 3/2;
+}
