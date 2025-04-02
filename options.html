@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+    <title>Cr:OS Options</title>
+    <!--favicon-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon_32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon_16x16.png">
+    <!--end of favicon-->
+    <link rel="stylesheet" type="text/css" href="/src/lib/fastbootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/styles.css">
+</head>
+
+<body>
+    <main id="optionsBody" class="position-relative">
+        <section id="options"
+            class="options page dynamic d-flex align-items-center justify-content-center bg-gradient position-relative">
+            <div class="bg-primary-subtle bg-gradient w-25 h-50 rounded-4 px-2 py-2 d-flex flex-column gap-2">
+                <div class="text-white bg-info bg-gradient w-100 rounded-4 py-2">
+                    <h1 class="fs-5 text-center mb-0">Hide/Show Content</h1>
+                </div>
+                <div class="btn-group d-flex flex-column gap-1 bg-light-subtle bg-gradient w-100 rounded-4 p-2"
+                    role="group">
+                    <div class="form-check fs-5 fw-medium">
+                        <input class="hs-input form-check-input" type="radio" name="monitoringOptions" id="hideHwInfo"
+                            autocomplete="off">
+                        <label class="form-check-label text-dark" for="hideHwInfo">Show only hardware
+                            monitoring</label>
+                    </div>
+                    <div class="form-check fs-5 fw-medium">
+                        <input class="hs-input form-check-input" type="radio" name="monitoringOptions"
+                            id="hideMonitoring">
+                        <label class="form-check-label text-dark" for="hideMonitoring">Show only hardware
+                            information</label>
+                    </div>
+                    <div class="form-check fs-5 fw-medium">
+                        <input class="hs-input form-check-input" type="radio" name="monitoringOptions" id="defaultUi"
+                            autocomplete="off">
+                        <label class="form-check-label text-dark" for="defaultUi">Show both (default)</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="bottom-info position-absolute bottom-0 start-50 translate-middle-x text-light text-center">
+            <h1 class="fs-5 pe-none">ChromeOS Hardware Info ©<span id="listYear"></span></h1>
+            <a href="https://github.com/gokacinlar" class="text-light">
+                <h1 class="fs-5">Derviş Öksüzoğlu</h1>
+            </a>
+        </div>
+    </main>
+    <!--Scripts-->
+    <script src="/src/app.js"></script>
+    <script src="/src/background/service_worker.js"></script>
+    <!--End of Scripts-->
+</body>
+
+</html>
