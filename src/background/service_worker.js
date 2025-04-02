@@ -7,10 +7,16 @@ chrome.runtime.getPlatformInfo(info => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const listYear = document.getElementById("listYear");
+    listYear.innerText = new Date().getFullYear();
+
+    lightDarkModeSwitcher();
+    assignDynamicCheckedAttribute();
+})
+
 // Define DOM elements
-const documentElements = {
-    bannerDiv: document.getElementById("banner")
-};
+const bannerDiv = document.getElementById("banner")
 
 const elemsToBeRemoved = {
     bannerHolderDiv: document.getElementById("bannerContent"),
@@ -29,19 +35,14 @@ function preventExtensionRunning() {
         bannerDivImgSrc: "/images/cros-logo.png"
     };
 
-    if (documentElements.bannerDiv) {
-        documentElements.bannerDiv.className = textInfo.bannerDivClass;
+    bannerDiv.className = textInfo.bannerDivClass;
+    // Create and append error message
+    const errorDiv = createErrorElement(textInfo);
+    bannerDiv.appendChild(errorDiv);
 
-        // Create and append error message
-        const errorDiv = createErrorElement(textInfo);
-        documentElements.bannerDiv.appendChild(errorDiv);
+    Object.values(elemsToBeRemoved).forEach(removeElement);
 
-        Object.values(elemsToBeRemoved).forEach(removeElement);
-
-        console.error(textInfo.errorMessage);
-    } else {
-        console.error("Banner div not found.");
-    }
+    console.error(textInfo.errorMessage);
 }
 
 // Function to create an error element to display error state
@@ -69,4 +70,52 @@ function removeElement(elem) {
     } else {
         console.error("Provided element could not be found.");
     }
+}
+
+// Handle dark/light mode switching in options page
+function lightDarkModeSwitcher() {
+    const staticElements = [
+        document.getElementById("options"),
+    ];
+
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        staticElements.forEach(element => {
+            element.classList.remove("bg-info");
+            element.classList.add("bg-dark");
+        });
+    } else {
+        staticElements.forEach(element => {
+            element.classList.remove("bg-dark");
+            element.classList.add("bg-info");
+        });
+    }
+}
+
+// Handle hide/show content radio button checking
+function assignDynamicCheckedAttribute() {
+    const hsCheckList = document.querySelectorAll(".hs-input");
+
+    // Load the checked state from chrome.storage
+    chrome.storage.local.get("selectedOption", (data) => {
+        const selectedOption = data.selectedOption;
+        if (selectedOption) {
+            hsCheckList.forEach((elem) => {
+                elem.checked = elem.id === selectedOption;
+            });
+        }
+    });
+
+    hsCheckList.forEach((elem) => {
+        elem.addEventListener("click", () => {
+            chrome.storage.local.set({ selectedOption: elem.id }); // Save to chrome.storage
+
+            // Uncheck other radio buttons
+            hsCheckList.forEach((otherElem) => {
+                if (otherElem !== elem) {
+                    otherElem.checked = false;
+                }
+            });
+            elem.checked = true;
+        });
+    });
 }
