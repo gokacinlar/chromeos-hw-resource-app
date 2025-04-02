@@ -9,34 +9,45 @@ function initSystemInfo() {
     displayNetworkInfo();
     setDocumentStyling();
     blurContent();
+    handleUi();
 }
+
+const tabsConfig = {
+    monitorTab: {
+        button: document.querySelector(".hwmonitor-btn"),
+        tab: document.querySelector("#hardwareMonitoringDiv")
+    },
+    infoTab: {
+        button: document.querySelector(".hwinfo-btn"),
+        tab: document.querySelector("#hardwareInfoDiv")
+    }
+};
 
 // Function to blur content based on tab switching
 function blurContent() {
-    const tabsConfig = {
-        monitorTab: {
-            button: document.querySelector(".hwmonitor-btn"),
-            tab: document.querySelector("#hardwareMonitoringDiv")
-        },
-        infoTab: {
-            button: document.querySelector(".hwinfo-btn"),
-            tab: document.querySelector("#hardwareInfoDiv")
-        }
-    };
-
     // Blur the Information Div because Monitoring Div is active by default
     tabsConfig.infoTab.tab.classList.add("blur");
 
     const updateBlur = () => {
         const { monitorTab, infoTab } = tabsConfig;
+
         if (monitorTab.button.checked) {
-            monitorTab.tab.classList.remove("blur");
-            infoTab.tab.classList.add("blur");
+            monitorTab.tab.classList.remove("blur", "pe-none");
+            infoTab.tab.classList.add("blur", "pe-none");
         } else if (infoTab.button.checked) {
-            infoTab.tab.classList.remove("blur");
-            monitorTab.tab.classList.add("blur");
+            infoTab.tab.classList.remove("blur", "pe-none");
+            monitorTab.tab.classList.add("blur", "pe-none");
         }
     };
+
+    // Remove the blur if user decides to list only hardware data
+    chrome.storage.local.get("selectedOption", (data) => {
+        const localStorageItem = data.selectedOption || "";
+
+        if (localStorageItem === "hideMonitoring") {
+            tabsConfig.infoTab.tab.classList.remove("blur");
+        }
+    });
 
     // Add change event listeners to the radio buttons
     tabsConfig.monitorTab.button.addEventListener("change", updateBlur);
@@ -46,8 +57,8 @@ function blurContent() {
 function setDocumentStyling() {
     const documentObject = {
         hardwareContainer: "hw-info-div col-12 py-2 gap-2 d-flex flex-column align-items-start justify-content-start",
-        hwTitleBg: "hw-info-title w-100 bg-primary text-white text-center rounded-2 px-2 py-2",
-        hwTitleName: "display-6 fw-normal mt-0 mb-0"
+        hwTitleBg: "hw-info-title d-flex flex-row gap-2 align-items-center justify-content-center w-100 bg-primary bg-gradient text-white text-center rounded-2 px-2 py-2 pe-none",
+        hwTitleName: "display-7 fw-normal my-0 mx-0 d-inline-block"
     };
 
     document.querySelectorAll(".hw-info-div").forEach(element => {
@@ -324,7 +335,7 @@ function getDisplayInfo() {
 
         displayInfo.forEach(display => {
             const displayJsonInfoProperties = {
-                "Monitor Name": display.name,
+                "Display Name": display.name,
                 "Width (px)": display.bounds.width,
                 "Height (px)": display.bounds.height,
                 "Touch Support": display.hasTouchSupport ? "Yes" : "No",
@@ -376,11 +387,6 @@ function displayNetworkInfo() {
 function updateNetworkStatus(target, isConnected) {
     if (navigator.connection) {
         const { effectiveType, downlink, rtt, saveData } = navigator.connection;
-
-        console.log(`Connection type: ${effectiveType}`);
-        console.log(`Downlink speed: ${downlink} Mbps`);
-        console.log(`Round-trip time: ${rtt} ms`);
-
         const statusMessage = isConnected
             ? `
             <div class="d-flex flex-column gap-2">
@@ -453,10 +459,48 @@ function convertBytesToGb(bytes) {
 }
 
 // Function to insert logo to proper architectures
-function insertArchitecture(divName, imgSource) {
+function insertArchitecture(div, imgSource) {
     const img = document.createElement("img");
     img.className = cpuArchInfo.caiClass;
     img.style = cpuArchInfo.caiStyling;
     img.src = imgSource;
-    divName.appendChild(img);
+    div.appendChild(img);
 }
+
+// Function to manage UI based on chrome.storage data
+function handleUi() {
+    chrome.storage.local.get("selectedOption", (data) => {
+        const localStorageItem = data.selectedOption;
+        console.log("selectedOption from storage:", localStorageItem);
+
+        if (!localStorageItem) {
+            console.error("selectedOption not found in chrome.storage.");
+            return;
+        }
+
+        const tabsDiv = document.querySelector("#tabsDiv");
+        const hardwareMonitoringDiv = document.querySelector("#hardwareMonitoringDiv");
+        const hardwareInfoDiv = document.querySelector("#hardwareInfoDiv");
+
+        switch (localStorageItem) {
+            case "hideHwInfo":
+                tabsDiv.remove();
+                hardwareInfoDiv.remove();
+                break;
+            case "hideMonitoring":
+                tabsDiv.remove();
+                hardwareMonitoringDiv.remove();
+                break;
+            default:
+                break;
+        }
+    });
+}
+
+// watch for changes in chrome.storage and update the UI
+chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && changes.selectedOption) {
+        console.log("selectedOption changed:", changes.selectedOption.newValue);
+        handleUi();
+    }
+});
