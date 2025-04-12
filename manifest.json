@@ -28,7 +28,8 @@
         "system.cpu",
         "system.memory",
         "system.storage",
-        "system.display"
+        "system.display",
+        "storage"
     ],
     "action": {
         "default_popup": "popup/popup.html",
