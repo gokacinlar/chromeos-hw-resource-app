@@ -9,7 +9,9 @@ chrome.runtime.getPlatformInfo(info => {
 
 document.addEventListener("DOMContentLoaded", function () {
     const listYear = document.getElementById("listYear");
-    listYear.innerText = new Date().getFullYear();
+    if (listYear) {
+        listYear.innerText = new Date().getFullYear();
+    }
 
     lightDarkModeSwitcher();
     assignDynamicCheckedAttribute();

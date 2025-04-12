@@ -130,14 +130,10 @@ function updateProcessorUsage(cpuInfo, cpuRuntimeInfoDiv) {
         cpuRuntimeInfoDiv.appendChild(overallCpuUsageHolder);
 
         // Update the progress bar
-        const progressBar = document.getElementById("cpuProgressBar");
-        if (progressBar) {
-            const usagePercentage = cpuDetailObj.usagePercentage.toFixed(2);
-            progressBar.style.width = `${usagePercentage}%`;
-            updateProgressBarClass(progressBar, usagePercentage);
-        } else {
-            console.log("Progress bar element could not be found.");
-        }
+        const progressBar = document.getElementById("cpuProgressBar")
+        const usagePercentage = cpuDetailObj.usagePercentage.toFixed(2);
+        progressBar.style.width = `${usagePercentage}%`;
+        updateProgressBarClass(progressBar, usagePercentage);
     });
 }
 
@@ -471,8 +467,6 @@ function insertArchitecture(div, imgSource) {
 function handleUi() {
     chrome.storage.local.get("selectedOption", (data) => {
         const localStorageItem = data.selectedOption;
-        console.log("selectedOption from storage:", localStorageItem);
-
         if (!localStorageItem) {
             console.error("selectedOption not found in chrome.storage.");
             return;
