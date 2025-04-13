@@ -17,27 +17,30 @@
 <body id="contentHolder">
     <main id="banner" class="w-100 d-flex flex-column gap-2 bg-black text-light px-3 py-3 position-relative">
         <section id="bannerContent" class="d-flex flex-column justify-content-center px-0">
-            <div class="d-flex flex-row gap-2 align-items-start justify-content-evenly">
-                <div>
-                    <img class="content-logo img-fluid rounded-3" src="/icons/icon_128x128.png"
-                        alt="ChromeOS Resource Monitor" title="ChromeOS Resource Monitor">
-                </div>
-                <div class="d-flex flex-column gap-3">
-                    <div>
-                        <h1 class="fs-5">ChromeOS Hardware Info & Monitor Utility</h1>
-                    </div>
-                    <div class="d-flex flex-row justify-content-between">
-                        <div class="d-flex flex-row gap-2">
-                            <a href="https://github.com/gokacinlar/chromeos-hw-resource-app" target="_blank"><img
-                                    class="link-icons" src="/images/bootstrap/github.svg" alt="GitHub"
-                                    title="GitHub"></a>
-                            <a href="buymeacoffee.com/gokacinlar" target="_blank"><img class="link-icons"
-                                    src="/images/bootstrap/bag-heart-fill.svg" alt="BuyMeACoffee"
-                                    title="Donate / BuyMeACoffee"></a>
+            <div class="d-flex flex-row gap-2 align-items-start">
+                <div class="d-flex flex-row justify-content-between gap-3 w-100 px-2">
+                    <div class="d-flex flex-row gap-2">
+                        <div class="li-top bg-dark bg-gradient text-white p-1 rounded-3">
+                            <a href="https://github.com/gokacinlar/chromeos-hw-resource-app"
+                                class="d-flex flex-row align-items-center gap-1 link-offset-2 link-underline link-underline-opacity-0 text-white fs-5"
+                                target="_blank" title="GitHub"><img class="link-icons img-fluid"
+                                    src="/images/bootstrap/github.svg" alt="GitHub" title="GitHub">
+                                GitHub</a>
                         </div>
-                        <div>
-                            <a href="/options.html" target="_blank"><img class="link-icons"
-                                    src="/images/bootstrap/gear-wide.svg" alt="Settings" title="Settings"></a>
+                        <div class="li-top bg-dark bg-gradient text-white p-1 rounded-3">
+                            <a href="https://buymeacoffee.com/gokacinlar"
+                                class="d-flex flex-row align-items-center gap-1 link-offset-2 link-underline link-underline-opacity-0 text-white fs-5"
+                                target="_blank" title="BuyMeACoffee"><img class="bmc-logo rounded-4 img-fluid"
+                                    src="/images/buymeacoffee/bmc-logo.png" alt="BuyMeACoffee"
+                                    title="Donate / BuyMeACoffee">BuyMeACoffee</a>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="li-top bg-dark bg-gradient text-white p-1 rounded-3">
+                            <a href="/options.html"
+                                class="d-flex flex-row align-items-center gap-1 link-offset-2 link-underline link-underline-opacity-0 text-white fs-5"
+                                target="_blank" title="Settings"><img class="link-icons img-fluid"
+                                    src="/images/bootstrap/gear-wide.svg" alt="Settings" title="Settings">Settings</a>
                         </div>
                     </div>
                 </div>
@@ -49,17 +52,17 @@
                 <input type="radio" class="btn-check hwmonitor-btn" name="btnradio" id="hwMonitoring" autocomplete="off"
                     checked>
                 <label class="d-flex justify-content-around align-items-center btn btn-primary bg-gradient"
-                    for="hwMonitoring"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
-                        fill="currentColor" class="bi bi-pie-chart" viewBox="0 0 16 16">
+                    for="hwMonitoring" title="Show Hardware Performance"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="28" height="28" fill="currentColor" class="bi bi-pie-chart" viewBox="0 0 16 16">
                         <path
                             d="M7.5 1.018a7 7 0 0 0-4.79 11.566L7.5 7.793zm1 0V7.5h6.482A7 7 0 0 0 8.5 1.018M14.982 8.5H8.207l-4.79 4.79A7 7 0 0 0 14.982 8.5M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8" />
                     </svg><span>Hardware
                         Monitoring</span></label>
 
                 <input type="radio" class="btn-check hwinfo-btn" name="btnradio" id="hwInfo" autocomplete="off">
-                <label class="d-flex justify-content-around align-items-center btn btn-primary bg-gradient"
-                    for="hwInfo"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                        class="bi bi-gear" viewBox="0 0 16 16">
+                <label class="d-flex justify-content-around align-items-center btn btn-primary bg-gradient" for="hwInfo"
+                    title="Show Hardware Information"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                        fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                         <path
                             d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
                         <path
